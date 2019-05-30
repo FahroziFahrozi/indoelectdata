@@ -1,1 +1,51 @@
+library(knitr)
+> library(broom)
+Warning message:
+package ‘broom’ was built under R version 3.5.3 
+> library(eechidna)
+Warning message:
+package ‘eechidna’ was built under R version 3.6.0 
+> data2014 <- read.csv(file="E:/SEMESTER 4 LULUS!!!!/Google Project/data fahrozi.csv", header=TRUE,  sep=",")
+> data2014
+
+#check party who won the legislative election
+who_won <- data2014 %>%
++ group_by(PartyNm) %>%
++ tally() %>%
++ arrange(desc(n))
+> who_won %>%
++ kable()
+
+
+|PartyNm                               |   n|
+|:-------------------------------------|---:|
+|Partai Demokrasi Indonesia Perjuangan | 110|
+|Partai Golongan Karya                 |  90|
+|Partai Gerakan Indonesia Raya         |  73|
+|Partai Demokrat                       |  60|
+|Partai Amanat Nasional                |  48|
+|Partai Kebangkitan Bangsa             |  48|
+|Partai Keadilan Sejahtera             |  41|
+|Partai Persatuan Pembangunan          |  40|
+|Partai NasDem                         |  35|
+|Partai Hati Nurani Rakyat             |  16|
+|Parta Demokrasi Indonesia Perjuangan  |   1|
+|Partai Nasional Demokrat              |   1|
+> library(ggplot2)
+Warning message:
+package ‘ggplot2’ was built under R version 3.5.3 
+> library(scales)
+Warning message:
+package ‘scales’ was built under R version 3.5.3 
+> ggplot(who_won, 
++        aes(reorder(PartyNm, n), 
++            n)) +
++   geom_point(size = 2) + 
++   coord_flip() + 
++   scale_y_continuous(labels = comma) +
++   theme_bw() +
++   ylab("Total number of electorates") +
++   xlab("Party") +
++   theme(text = element_text(size=10))
+> 
 
