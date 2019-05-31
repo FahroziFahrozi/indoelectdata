@@ -1,9 +1,0 @@
-#Google Summer of Code projects under R Statistical COmputing
-
-I plan to produce a package like the Eechidna package, but for Indonesia. It will include the raw
-data, and several vignettes with visualisations that explore the data to answer common questions
-about voting patterns.
-In Eechidna package makes it easy to look at the data from several years worth of Australian
-Censuses and Federal Elections. Functions in the package can be used to pull the most recent
-election and Census data, and future changes. In this project I will use for Indonesia election
-case. I will use the election data 2014 about Legilative election and Presidential Election including census data as well from Indonesian Statistics office
