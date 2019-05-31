@@ -10,4 +10,4 @@ The eechidna package makes it easy to look at the data from several years worth 
 
 Functions in the package can be used to pull the most recent election and Census data, and future changes. 
 
-In this project I will use for Indonesia election case. I will use the election data from the 2014 Legilsative election and Presidential Election, including census data from the Indonesian Statistics office.
+In this project I will use Indonesia election data. I will use the election data from the 2014 Legilsative election and Presidential Election, including census data from the Indonesian Statistics office.
