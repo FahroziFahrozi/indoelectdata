@@ -1,15 +1,76 @@
-library(knitr)
+library(eechidna)
+Warning message:
+package ‘eechidna’ was built under R version 3.6.0 
+> 
+> library(plyr)
+Warning message:
+package ‘plyr’ was built under R version 3.5.3 
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:plyr’:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise,
+    summarize
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Warning message:
+package ‘dplyr’ was built under R version 3.5.3 
+> library(purrr)
+
+Attaching package: ‘purrr’
+
+The following object is masked from ‘package:plyr’:
+
+    compact
+
+Warning message:
+package ‘purrr’ was built under R version 3.5.3 
+> library(purrrlyr)
+Warning message:
+package ‘purrrlyr’ was built under R version 3.6.0 
+> library(knitr)
+Warning message:
+package ‘knitr’ was built under R version 3.5.3 
 > library(broom)
 Warning message:
 package ‘broom’ was built under R version 3.5.3 
-> library(eechidna)
+> library(tidyr)
 Warning message:
-package ‘eechidna’ was built under R version 3.6.0 
-> data2014 <- read.csv(file="E:/SEMESTER 4 LULUS!!!!/Google Project/data fahrozi.csv", header=TRUE,  sep=",")
-> data2014
+package ‘tidyr’ was built under R version 3.5.3 
+> library(readxl)
+Warning message:
+package ‘readxl’ was built under R version 3.5.3 
+> Data_Fahrozi <- read_excel("E:/SEMESTER 4 LULUS!!!!/Google Project/Data Fahrozi.xlsx")
+> View(Data_Fahrozi)
+> glipmpse(Data_Fahrozi)
+Error in glipmpse(Data_Fahrozi) : could not find function "glipmpse"
+> glimpse(Data_Fahrozi)
+Observations: 563
+Variables: 3
+$ Names     <chr> "Teuku Riefky Harsa", "Irmawan", "Muhammad Nasir Djamil",...
+$ PartyNm   <chr> "Partai Demokrat", "Partai Kebangkitan Bangsa", "Partai K...
+$ Provinces <chr> "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1...
+> head(Data_Fahrozi) %>% kable
 
-#check party who won the legislative election
-who_won <- data2014 %>%
+
+|Names                 |PartyNm                       |Provinces |
+|:---------------------|:-----------------------------|:---------|
+|Teuku Riefky Harsa    |Partai Demokrat               |Aceh 1    |
+|Irmawan               |Partai Kebangkitan Bangsa     |Aceh 1    |
+|Muhammad Nasir Djamil |Partai Keadilan Sejahtera     |Aceh 1    |
+|Bachtiar Aly          |Partai NasDem                 |Aceh 1    |
+|Muslim Ayub           |Partai Amanat Nasional        |Aceh 1    |
+|Fadhullah             |Partai Gerakan Indonesia Raya |Aceh 1    |
+> who_won <- Data_Fahrozi %>%
 + group_by(PartyNm) %>%
 + tally() %>%
 + arrange(desc(n))
@@ -35,17 +96,177 @@ who_won <- data2014 %>%
 Warning message:
 package ‘ggplot2’ was built under R version 3.5.3 
 > library(scales)
+
+Attaching package: ‘scales’
+
+The following object is masked from ‘package:purrr’:
+
+    discard
+
 Warning message:
 package ‘scales’ was built under R version 3.5.3 
+> ggplot(who_won,)
+> ggplot(who_won, aes(reorder(PartyNm, n), n))
+> geom_point(size = 2)
+geom_point: na.rm = FALSE
+stat_identity: na.rm = FALSE
+position_identity 
+> coord_flip()
+<ggproto object: Class CoordFlip, CoordCartesian, Coord, gg>
+    aspect: function
+    backtransform_range: function
+    clip: on
+    default: FALSE
+    distance: function
+    expand: TRUE
+    is_free: function
+    is_linear: function
+    labels: function
+    limits: list
+    modify_scales: function
+    range: function
+    render_axis_h: function
+    render_axis_v: function
+    render_bg: function
+    render_fg: function
+    setup_data: function
+    setup_layout: function
+    setup_panel_params: function
+    setup_params: function
+    transform: function
+    super:  <ggproto object: Class CoordFlip, CoordCartesian, Coord, gg>
+> scale_y_continuous(labels = comma) +
++ scale_y_continuous(labels = comma) +
++ 
+
 > ggplot(who_won, 
-+        aes(reorder(PartyNm, n), 
-+            n)) +
-+   geom_point(size = 2) + 
-+   coord_flip() + 
-+   scale_y_continuous(labels = comma) +
-+   theme_bw() +
-+   ylab("Total number of electorates") +
-+   xlab("Party") +
-+   theme(text = element_text(size=10))
-> 
++        +        aes(reorder(PartyNm, n), 
++                     +            n)) +
++ 
+
+> ggplot(who_won, 
++ aes(reorder(PartyNm, n),
++ n)) +
++ geom_point(size = 2) + 
++     coord_flip() + 
++     scale_y_continuous(labels = comma) +
++     theme_bw() +
++     ylab("Total number of electorates") + xlab("Party") +
++     theme(text = element_text(size=10))
+> library(readxl)
+> totalvotes <- read_excel("E:/SEMESTER 4 LULUS!!!!/Google Project/totalvotes.xlsx")
+> View(totalvotes)
+> glimpse(totalvotes)
+Observations: 924
+Variables: 3
+$ Provinces <chr> "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1...
+$ PartyNm   <chr> "Partai Nasdem", "Partai Kebangkitan Bangsa", "Partai Kea...
+$ Votes     <dbl> 151121, 92905, 105868, 35419, 140954, 184538, 209598, 151...
+> totalvotes <- totalvotes %>% mutate(Votes=as.numeric(Votes))
+> glimpse(totalvotes)
+Observations: 924
+Variables: 3
+$ Provinces <chr> "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1", "Aceh 1...
+$ PartyNm   <chr> "Partai Nasdem", "Partai Kebangkitan Bangsa", "Partai Kea...
+$ Votes     <dbl> 151121, 92905, 105868, 35419, 140954, 184538, 209598, 151..
+
+#WHICH PARTY WON THE ELECTION
+
+> totalvotes <- totalvotes %>% mutate(Votes=as.numeric(Votes))
+> total_votes_for_parties <- totalvotes %>%
++ select(PartyNm, Votes) %>%
++ group_by(PartyNm) %>%
++ summarise(tvotes = sum(Votes)) %>%
++ ungroup() %>%
++ arrange(desc(tvotes))
+> total_votes_for_parties %>%
++ head %>%
++ kable
+
+#WHICH PARTY RECEIVED THE MOST ORDINARY VOTES?
+
+|PartyNm                               |   tvotes|
+|:-------------------------------------|--------:|
+|Partai Demokrasi Indonesia Perjuangan | 23682471|
+|Partai Golongan Karya                 | 18432312|
+|Partai Gerindra                       | 14760371|
+|Partai Demokrat                       | 12561934|
+|Partai Kebangkitan Bangsa             | 11298957|
+|Partai Amanat Nasional                |  9584961|
+> ggplot(total_votes_for_parties,)
+> ggplot(total_votes_for_parties,
++ aes(reorder(PartyNm, tvotes),
++ tvotes))
+> geom_point(size = 2)+
++ 
+
+> ggplot(total_votes_for_parties,
++ aes(reorder(PartyNm, tvotes),
++ tvotes))+
++ geom_point(size = 2)+
++ coord_flip() +
++ scale_y_continuous(labels = comma) +
++ theme_bw() +
++ ylab("Total votes") +
++ xlab("Party") +
++ theme(text = element_text(size=10))
+> library(readxl)
+> Totalseats <- read_excel("E:/SEMESTER 4 LULUS!!!!/Google Project/Totalseats.xlsx")
+> View(Totalseats)
+> glimpse(Totalseats)
+Observations: 396
+Variables: 3
+$ Provinces  <chr> "Aceh", "Aceh", "Aceh", "Aceh", "Aceh", "Aceh", "Aceh", ...
+$ PartyNm    <chr> "Partai Nasdem", "Partai Kebangkitan Bangsa", "Partai Ke...
+$ Totalseats <dbl> 2, 1, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0, 3, 1, 3, 4, 4, 4, 3,...
+> library(readxl)
+> Totalseats <- read_excel("E:/SEMESTER 4 LULUS!!!!/Google Project/Totalseats.xlsx")
+> View(Totalseats)
+> glimpse(Totalseats)
+Observations: 396
+Variables: 3
+$ Provinces <chr> "Aceh", "Aceh", "Aceh", "Aceh", "Aceh", "Aceh", "Aceh", "...
+$ PartyNm   <chr> "Partai Nasdem", "Partai Kebangkitan Bangsa", "Partai Kea...
+$ Totseats  <dbl> 2, 1, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0, 3, 1, 3, 4, 4, 4, 3, ...
+> Totalseats <- Totalseats %>% mutate(Totseats=as.numeric(Totseats))
+> Total_seats_for_parties <- Totalseats %>%
++ select(PartyNm, Totseats) %>%
++ group_by(PartyNm) %>%
++ summarise(tot_seats = sum(Totseats)) %>%
++ ungroup() %>%
++ arrange(desc(tot_seats))
+> Total_seats_for_parties %>%
++ head %>%
++ kable
+
+#WHICH PARTY RECEIVED GET A LOT OF SEATS IN THE PARLIAMENT
+
+|PartyNm                               | tot_seats|
+|:-------------------------------------|---------:|
+|Partai Demokrasi Indonesia Perjuangan |       109|
+|Partai Golongan Karya                 |        91|
+|Partai Gerindra                       |        74|
+|Partai Demokrat                       |        60|
+|Partai Amanat Nasional                |        50|
+|Partai Kebangkitan Bangsa             |        47|
+> Total_seats_for_provinces <- Totalseats %>%
++ select(Provinces, Totseats) %>%
++ group_by(Provinces) %>%
++ summarise(tot_seats = sum(Totseats)) %>%
++ ungroup() %>%
++ arrange(desc(tot_seats))
+> Total_seats_for_provinces %>%
++ head %>%
++ kable
+
+#WHICH PROVINCES IN INDONESIA GET A LOT OF SEATS IN LEGISLATIVE ELECTION IN PARLIAMENT REPUBLIC OF INDONESIA
+
+|Provinces        | tot_seats|
+|:----------------|---------:|
+|Jawa Barat       |        91|
+|Jawa Timur       |        87|
+|Jawa Tengah      |        77|
+|Sumatra Utara    |        30|
+|Sulawesi Selatan |        24|
+|Banten           |        22|
 
