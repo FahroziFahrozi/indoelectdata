@@ -1,15 +1,34 @@
-## Background
+# Indoelectdata
 
+The purpose of this package is to make available data from the Indonedian General Election of 2014. The package was created by Fahrozi for a Google Summer of Code Project in 2019, with assistence from Jeremy Forbes and Ben Marwick
+
+hope
+
+## Background
 
 An election is one of the main pillars of an accumulation of people's will, General Election as well as a democratic procedure for choosing leaders.
 
-In Indonesia, elections are a matter of great waiting because it is a party of democracy for all people to choose leaders of their choice. Elections also generate data which is of great public interest, but often not easy to access or work with. R is a language and environment for statistical computing and graphics and R provides a wide variety of statistical (linear and nonlinear modeling, classical statistical tests, time-series analysis, classification, clustering, …) and graphical techniques, and is highly extensible. R makes data analysis accessible to everyone and, of course, can help us to answer questions about data. 
+In Indonesia, elections are a matter of great waiting because it is a party of democracy for all people to choose leaders of their choice. Elections also generate data which is of great public interest, but often not easy to access or work with. R is a language and environment for statistical computing and graphics and R provides a wide variety of statistical (linear and nonlinear modeling, classical statistical tests, time-series analysis, classification, clustering) and graphical techniques, and is highly extensible. R makes data analysis accessible to everyone and, of course, can help us to answer questions about data. 
 
 Among the many packages available for R, there is a package called eechidna (Exploring Election and Census Highly Informative Data Nationally for Australia). This package makes it easy to look at the data from several years worth of Australian Censuses and Federal Elections. Functions in the package can be used to pull the most recent election and Census data, and future changes. \[1\].
 
 The main goal of my project is to explore the elections and census data from The Indonesian Central Bureau of Statistics (BPS). I will explore and make a visualization of Legislative and presidential elections data on 2014.
 
 Proposal: https://github.com/rstats-gsoc/gsoc2019/wiki/Exploring-Election-and-Census-Highly-Informative-Data-Nationally-for-Indonesia-(-Eechidna-R-package) 
+
+# Proposal for Google Summer of Code projects under R Statistical Computing
+
+I plan to produce a package like the [eechidna](https://cran.r-project.org/web/packages/eechidna/index.html) package, but for Indonesia. It will include:
+
+- the raw data, 
+- several vignettes with visualisations that explore the data to answer common questions
+about voting patterns.
+
+The eechidna package makes it easy to look at the data from several years worth of Australian Censuses and Federal Elections. 
+
+Functions in the package can be used to pull the most recent election and Census data, and future changes. 
+
+In this project I will use Indonesia election data. I will use the election data from the 2014 Legilsative election and Presidential Election, including census data from the Indonesian Statistics office.
 
 Timeline:
 

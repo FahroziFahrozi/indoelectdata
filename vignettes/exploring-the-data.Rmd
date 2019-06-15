@@ -1,0 +1,264 @@
+---
+title: "Exploring the Indonesian Legislative & Presidential Election of 2014"
+author: "Fahrozi" 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{exploring-the-data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(indoelectdata)
+```
+
+
+## Exploring Election and Cencus Highly Informative Data Nationally for Indonesia
+
+An Election is one of the main pillars of democracy. it presents the will of the people and determines a country's leadership.
+
+In Indonesia, elections are highly anticipated, because they provide an opportunity for all people to influence the direction of their country. The results and voting patterns in an election are of great public interest, but often data is not easy to access or work with. This project aims to increase the accessibility of Indonesian election data, which would be particularly beneficial to researchers, journalists and NGOs.
+
+This project will discuss the Indonesian Legislative Election and Presidential Election of 2014. This Indonesian Legislative Election was held in Indonesia on 9 April 2014 to elect members of the Regional Representative Council (DPD), Members of People's Representative Council (DPR) and members of the regional assemblies at the provinces. 
+
+The 2014 Presidential Election were held in Indonesia on 9 July. According to the 2008 election law, the nominations of the candidates for the presidential election may only be made by a party (or coalition of parties) which has at least 20% of the seats in the national parliament (the DPR) or which received 25% of national votes in the previous national legislative election for the DPR.
+
+## Import csv files
+
+```{r import-csv}
+library(readxl)
+library(here)
+library(dplyr)
+library(purrr)
+library(readxl)
+library(ggplot2)
+library(scales)
+library(knitr)
+
+Legislative_Election <- read_excel(here::here("vignettes/Data/Party in Legislative Election.xls"))
+```
+
+## Parties
+
+``` {r echo=FALSE, include=TRUE}
+glimpse(Legislative_Election) %>% head %>% kable
+```
+
+## Party that won the Legislative Election
+
+```{r party-who-won}
+who_won <-
+  Legislative_Election %>%
+  group_by(PartyNm) %>%
+  tally() %>%
+  arrange(desc(n))
+
+who_won %>%
+  kable()
+```
+
+``` {r ggplot-who-won}
+
+ggplot(who_won,
+       aes(reorder(PartyNm, n),
+           n)) +
+  geom_point(size = 4) +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  theme_bw() +
+  ylab("Total number of electorates") +
+  xlab("Party") +
+  theme(text = element_text(size = 12))
+```
+
+## Total votes
+
+``` {r total-votes}
+totalvotes <- read_excel(here::here("vignettes/Data/Total Votes percandidates.xlsx"))
+```
+
+## Party receiving the most votes in the Legislative Election
+
+``` {r total-votes2}
+totalvotes <- 
+  totalvotes %>% 
+  mutate(Votes = as.numeric(Votes))
+
+total_votes_for_parties <- 
+  totalvotes %>%
+  select(PartyNm, Votes) %>%
+  group_by(PartyNm) %>%
+  summarise(tvotes = sum(Votes)) %>%
+  ungroup() %>%
+  arrange(desc(tvotes))
+
+total_votes_for_parties %>%
+  kable
+```
+
+``` {r ggplot-total-votes}
+ggplot(total_votes_for_parties,
+       aes(reorder(PartyNm, tvotes),
+           tvotes)) +
+  geom_point(size = 4) +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  theme_bw() +
+  ylab("Total votes") +
+  xlab("Party") +
+  theme(text = element_text(size = 12))
+```
+
+## Party getting the highest number of seats in Parliament 
+
+``` {r totalseats}
+Totalseats <- read_excel(here::here("vignettes/Data/Totalseats.xlsx"))
+```
+
+``` {r Total-seats-for-parties}
+Totalseats <-
+  Totalseats %>%
+  mutate(Totseats = as.numeric(Totseats))
+
+Total_seats_for_parties <- 
+  Totalseats %>%
+  select(PartyNm, Totseats) %>%
+  group_by(PartyNm) %>%
+  summarise(tot_seats = sum(Totseats)) %>%
+  ungroup() %>%
+  arrange(desc(tot_seats))
+
+Total_seats_for_parties  %>%
+  kable
+```
+
+``` {r ggplot-Total-seats-for-parties}
+ggplot(Total_seats_for_parties,
+       aes(reorder(PartyNm, tot_seats),
+           tot_seats)) +
+  geom_point(size = 4) +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  theme_bw() +
+  ylab("Total seats") +
+  xlab("Party") +
+  theme(text = element_text(size=12))
+```
+
+## Provinces getting the most seats in parliament
+
+``` {r Total-seats-for-provinces}
+Total_seats_for_provinces <- 
+  Totalseats %>%
+  select(Provinces, Totseats) %>%
+  group_by(Provinces) %>%
+  summarise(tot_seats = sum(Totseats)) %>%
+  ungroup() %>%
+  arrange(desc(tot_seats))
+
+Total_seats_for_provinces %>%
+  kable
+```
+
+``` {r ggplot-Total-seats-for-provinces}
+ggplot(Total_seats_for_provinces,
+       aes(reorder(Provinces, tot_seats),
+           tot_seats)) +
+  geom_point(size = 4) +
+  coord_flip() +
+  scale_y_continuous(labels = comma) +
+  theme_bw() +
+  ylab("Total seats") +
+  xlab("Provinces") +
+  theme(text = element_text(size=12))
+```
+  
+## Which candidate did the best?
+```{r candidate-did-the-best}
+
+totalvotes <-
+  totalvotes %>%
+  mutate(Votes = as.numeric(Votes))
+
+total_votes_for_candidate <- totalvotes %>%
+  select(Name, Votes) %>%
+  group_by(Name) %>%
+  summarise(tvotes = sum(Votes)) %>%
+  ungroup() %>%
+  arrange(desc(tvotes))
+
+total_votes_for_candidate %>%
+  head %>% 
+  kable
+```
+
+```{r who-won-most-votes}
+who_won_most_votes_prop <-
+  totalvotes %>%
+  group_by(Electorate, Name) %>%
+  summarise(sum_votes = sum(Votes)) %>%
+  mutate(prop_votes = round(sum_votes / sum(sum_votes), 3),
+         sum_votes = prettyNum(sum_votes, ",")) %>%
+  ungroup %>%
+  arrange(desc(prop_votes))
+
+who_won_most_votes_prop %>%
+  head %>%
+  kable
+```
+
+
+## How did each electorate vote in each province?
+
+# Summarise and compute proportion of votes for PDIP party
+
+BM: I'm not 100% sure what you want this plot to look like. Can you explain more?
+
+
+```{r proportion-of-votes}
+
+totalvotes <- totalvotes %>%
+  mutate(Votes = as.numeric(Votes))
+
+P <- totalvotes %>%
+  group_by(Electorate, Provinces) %>%
+  mutate(Totalvotes = sum(Votes)) %>%
+  mutate(ProportionPDIP = round(sum(Votes[PartyNm == "Partai Demokrasi Indonesia Perjuangan"]) / Totalvotes, 3)) %>%
+  arrange(desc(ProportionPDIP)) %>% 
+  distinct_at(vars(Electorate, Provinces, ProportionPDIP, Totalvotes))
+
+province_plots <- 
+P %>% 
+  ungroup %>% 
+  group_nest(Provinces) %>% 
+  # only provinces with >1 electorates
+  filter(map_int(data, nrow) > 1) %>% 
+  mutate(province_plots = map(data, 
+                              ~ggplot(.x,
+                                      aes(
+                 x = ProportionPDIP,
+                 y = reorder(Electorate,
+                             ProportionPDIP),
+                 size = Totalvotes,
+               )) +
+        geom_point() +
+        ylab("Electorate") +
+        theme_bw(base_size = 8) +
+        theme(legend.position="none")
+        )) 
+
+cowplot::plot_grid(plotlist = province_plots$province_plots)
+
+```
+
+
