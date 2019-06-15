@@ -2,8 +2,6 @@
 
 The purpose of this package is to make available data from the Indonedian General Election of 2014. The package was created by Fahrozi for a Google Summer of Code Project in 2019, with assistence from Jeremy Forbes and Ben Marwick
 
-hope
-
 ## Background
 
 An election is one of the main pillars of an accumulation of people's will, General Election as well as a democratic procedure for choosing leaders.
