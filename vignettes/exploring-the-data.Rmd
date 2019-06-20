@@ -46,7 +46,8 @@ library(scales)
 library(knitr)
 
 Legislative_Election <- read_excel(here::here("vignettes/Data/Party in Legislative Election.xls"))
-usethis::use_data(Legislative_Election, overwrite = TRUE)
+Legislative_Election <- Legislative_Election %>% tbl_df()
+save(Legislative_Election, file ="data/Legislative_Election.rdata")
 ```
 
 ## Parties
@@ -66,7 +67,6 @@ who_won <-
 
 who_won %>%
   kable()
-usethis::use_data(who_won, overwrite = TRUE )
 ```
 
 ``` {r ggplot-who-won}
@@ -80,14 +80,15 @@ ggplot(who_won,
   theme_bw() +
   ylab("Total number of electorates") +
   xlab("Party") +
-  theme(text = element_text(size = 12))
+  theme(text = element_text(size = 8))
 ```
 
 ## Total votes
 
 ``` {r total-votes}
 totalvotes <- read_excel(here::here("vignettes/Data/Total Votes percandidates.xlsx"))
-usethis::use_data(totalvotes, overwrite = TRUE)
+totalvotes <- totalvotes %>% tbl_df()
+save(totalvotes, file = "data/totalvotes.rdata")
 ```
 
 ## Party receiving the most votes in the Legislative Election
@@ -107,7 +108,6 @@ total_votes_for_parties <-
 
 total_votes_for_parties %>%
   kable
-usethis::use_data(total_votes_for_parties, overwrite = TRUE)
 ```
 
 ``` {r ggplot-total-votes}
@@ -120,14 +120,15 @@ ggplot(total_votes_for_parties,
   theme_bw() +
   ylab("Total votes") +
   xlab("Party") +
-  theme(text = element_text(size = 12))
+  theme(text = element_text(size = 8))
 ```
 
 ## Party getting the highest number of seats in Parliament 
 
 ``` {r totalseats}
 Totalseats <- read_excel(here::here("vignettes/Data/Totalseats.xlsx"))
-usethis::use_data(Totalseats, overwrite = TRUE)
+Totalseats <- Totalseats %>% tbl_df()
+save(Totalseats, file = "data/Totalseats.rdata")
 ```
 
 ``` {r Total-seats-for-parties}
@@ -145,7 +146,6 @@ Total_seats_for_parties <-
 
 Total_seats_for_parties  %>%
   kable
-usethis::use_data(Total_seats_for_parties, overwrite = TRUE)
 ```
 
 ``` {r ggplot-Total-seats-for-parties}
@@ -158,7 +158,7 @@ ggplot(Total_seats_for_parties,
   theme_bw() +
   ylab("Total seats") +
   xlab("Party") +
-  theme(text = element_text(size=12))
+  theme(text = element_text(size=8))
 ```
 
 ## Provinces getting the most seats in parliament
@@ -174,7 +174,6 @@ Total_seats_for_provinces <-
 
 Total_seats_for_provinces %>%
   kable
-usethis::use_data(Total_seats_for_provinces, overwrite = TRUE)
 ```
 
 ``` {r ggplot-Total-seats-for-provinces}
@@ -187,7 +186,7 @@ ggplot(Total_seats_for_provinces,
   theme_bw() +
   ylab("Total seats") +
   xlab("Provinces") +
-  theme(text = element_text(size=12))
+  theme(text = element_text(size=8))
 ```
   
 ## Which candidate did the best?
@@ -207,7 +206,6 @@ total_votes_for_candidate <- totalvotes %>%
 total_votes_for_candidate %>%
   head %>% 
   kable
-usethis::use_data(total_votes_for_candidate, overwrite = TRUE)
 ```
 
 ```{r who-won-most-votes}
@@ -223,7 +221,21 @@ who_won_most_votes_prop <-
 who_won_most_votes_prop %>%
   head %>%
   kable
-usethis::use_data(who_won_most_votes_prop, overwrite = TRUE)
+```
+```{r who-won-least-votes}
+who_won_least_votes_prop <-
+  totalvotes %>%
+  filter(Provinces == "Bengkulu") %>%
+  group_by(Electorate, Name) %>%
+  summarise(sum_votes = sum(Votes)) %>%
+  mutate(prop_votes = round(sum_votes / sum(sum_votes), 3),
+         sum_votes = prettyNum(sum_votes, ",")) %>%
+  ungroup %>%
+  arrange(desc(prop_votes))
+
+who_won_least_votes_prop %>%
+  head %>%
+  kable
 ```
 
 
@@ -260,14 +272,13 @@ P %>%
                              ProportionPDIP),
                  size = Totalvotes,
                )) +
-        geom_point() +
+        geom_point(size = 4) +
         ylab("Electorate") +
         theme_bw(base_size = 8) +
         theme(legend.position="none")
         )) 
 
 cowplot::plot_grid(plotlist = province_plots$province_plots)
-usethis::use_data(province_plots, overwrite = TRUE)
 ```
 
 
