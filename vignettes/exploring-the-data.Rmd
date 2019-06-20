@@ -86,7 +86,7 @@ ggplot(who_won,
 ## Total votes
 
 ``` {r total-votes}
-totalvotes <- read_excel(here::here("vignettes/Data/Total Votes percandidates.xlsx"))
+totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
 totalvotes <- totalvotes %>% tbl_df()
 save(totalvotes, file = "data/totalvotes.rdata")
 ```
@@ -126,7 +126,7 @@ ggplot(total_votes_for_parties,
 ## Party getting the highest number of seats in Parliament 
 
 ``` {r totalseats}
-Totalseats <- read_excel(here::here("vignettes/Data/Totalseats.xlsx"))
+Totalseats <- read.csv(here::here("data-raw/Totalseats.csv"))
 Totalseats <- Totalseats %>% tbl_df()
 save(Totalseats, file = "data/Totalseats.rdata")
 ```
