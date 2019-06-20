@@ -36,7 +36,7 @@ The 2014 Presidential Election were held in Indonesia on 9 July. According to th
 ## Import csv files
 
 ```{r import-csv}
-library(readxl)
+library(csv)
 library(here)
 library(dplyr)
 library(purrr)
@@ -45,7 +45,7 @@ library(ggplot2)
 library(scales)
 library(knitr)
 
-Legislative_Election <- read_excel(here::here("vignettes/Data/Party in Legislative Election.xls"))
+Legislative_Election <- read.csv(here::here("data-raw/Party in Legislative Election.csv"))
 Legislative_Election <- Legislative_Election %>% tbl_df()
 save(Legislative_Election, file ="data/Legislative_Election.rdata")
 ```
