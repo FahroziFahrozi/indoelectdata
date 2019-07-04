@@ -47,7 +47,7 @@ library(knitr)
 
 Legislative_Election <- read.csv(here::here("data-raw/Party in Legislative Election.csv"))
 Legislative_Election <- Legislative_Election %>% tbl_df()
-save(Legislative_Election, file ="data/Legislative_Election.rdata")
+save(Legislative_Election,file="C:/Users/fahro/OneDrive/Documents/GSoC-Project/data/Legislative_Election.rdata")
 ```
 
 ## Parties
@@ -88,7 +88,7 @@ ggplot(who_won,
 ``` {r total-votes}
 totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
 totalvotes <- totalvotes %>% tbl_df()
-save(totalvotes, file = "data/totalvotes.rdata")
+save(totalvotes, file = "C:/Users/fahro/OneDrive/Documents/GSoC-Project/data/totalvotes.rdata")
 ```
 
 ## Party receiving the most votes in the Legislative Election
@@ -128,7 +128,7 @@ ggplot(total_votes_for_parties,
 ``` {r totalseats}
 Totalseats <- read.csv(here::here("data-raw/Totalseats.csv"))
 Totalseats <- Totalseats %>% tbl_df()
-save(Totalseats, file = "data/Totalseats.rdata")
+save(Totalseats, file = "C:/Users/fahro/OneDrive/Documents/GSoC-Project/data/Totalseats.rdata")
 ```
 
 ``` {r Total-seats-for-parties}
@@ -243,8 +243,6 @@ who_won_least_votes_prop %>%
 
 # Summarise and compute proportion of votes for PDIP party
 
-BM: I'm not 100% sure what you want this plot to look like. Can you explain more?
-
 
 ```{r proportion-of-votes}
 
@@ -280,5 +278,15 @@ P %>%
 
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
+```{r shapefile}
+
+library(rgdal)
+library(sp)
+library(ggplot2)
+library(ggmap)
+library(raster)
+map <- readOGR(dsn="C:/Users/fahro/OneDrive/Documents/GSoC-Project/Shapefile",layer = "INDONESIA_PROP.shp")
 
 
+
+```
