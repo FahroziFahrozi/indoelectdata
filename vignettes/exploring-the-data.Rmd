@@ -47,7 +47,7 @@ library(knitr)
 
 Legislative_Election <- read.csv(here::here("data-raw/Party in Legislative Election.csv"))
 Legislative_Election <- Legislative_Election %>% tbl_df()
-save(Legislative_Election,file="C:/Users/fahro/OneDrive/Documents/GSoC-Project/data/Legislative_Election.rdata")
+#save(Legislative_Election,file="../data/Legislative_Election.rdata")
 ```
 
 ## Parties
@@ -88,7 +88,7 @@ ggplot(who_won,
 ``` {r total-votes}
 totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
 totalvotes <- totalvotes %>% tbl_df()
-save(totalvotes, file = "C:/Users/fahro/OneDrive/Documents/GSoC-Project/data/totalvotes.rdata")
+#save(totalvotes, file = "../data/totalvotes.rdata")
 ```
 
 ## Party receiving the most votes in the Legislative Election
@@ -128,7 +128,7 @@ ggplot(total_votes_for_parties,
 ``` {r totalseats}
 Totalseats <- read.csv(here::here("data-raw/Totalseats.csv"))
 Totalseats <- Totalseats %>% tbl_df()
-save(Totalseats, file = "C:/Users/fahro/OneDrive/Documents/GSoC-Project/data/Totalseats.rdata")
+#save(Totalseats, file = "../data/Totalseats.rdata")
 ```
 
 ``` {r Total-seats-for-parties}
