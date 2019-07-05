@@ -278,15 +278,13 @@ P %>%
 
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
-```{r shapefile}
 
+```{r shapefile}
 library(rgdal)
 library(sp)
-library(ggplot2)
-library(ggmap)
-library(raster)
-map <- readOGR(dsn="C:/Users/fahro/OneDrive/Documents/GSoC-Project/Shapefile",layer = "INDONESIA_PROP.shp")
 
-
+# Read in shapefile of provinces
+# Shapefile obtained from: http://www.info-geospasial.com/2015/10/data-shp-seluruh-indonesia.html?m=1
+map <- readOGR("../Shapefile/INDONESIA_PROP.shp")
 
 ```
