@@ -282,9 +282,30 @@ cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```{r shapefile}
 library(rgdal)
 library(sp)
+library(ggthemes)
+library(ggmap)
+library(ggplot2)
+library(mapproj)
+library(broom)
+library(maptools)
+library(plyr)
+library(dplyr)
+require(sp)
+?sp::merge
 
 # Read in shapefile of provinces
 # Shapefile obtained from: http://www.info-geospasial.com/2015/10/data-shp-seluruh-indonesia.html?m=1
-map <- readOGR("../Shapefile/INDONESIA_PROP.shp")
+postcode <- readOGR("../Shapefile/INDONESIA_PROP.shp")
+postcode@data$ID <- rownames(postcode@data)
+totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
+map.winners <- merge(postcode, totalvotes, by.x="Propinsi", by.y="Electorate")
+map.winners@data$ID <- rownames(map.winners@data)
+#groupping
+map.winners$PartyNm <- map.winners$PartyNm
+partycolours = c("#FF0033", "#000000", "#CC3300", "#0066CC", "#FFFF00", "#009900")
+ggplot(data = map.winners) +
+  geom_polygon(aes(x=long, y=lat, group=group, fill= PartyNm)) +
+  scale_fill_manual(name= "Election party", values=partycolours) +
+  theme_map() + coord_equal() + theme(legend.position = "bottom")
 
 ```
