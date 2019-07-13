@@ -18,11 +18,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(devtools)
-```
-
-
 ## Exploring Election and Cencus Highly Informative Data Nationally for Indonesia
 
 An Election is one of the main pillars of democracy. it presents the will of the people and determines a country's leadership.
@@ -47,7 +42,6 @@ library(knitr)
 
 Legislative_Election <- read.csv(here::here("data-raw/Party in Legislative Election.csv"))
 Legislative_Election <- Legislative_Election %>% tbl_df()
-#save(Legislative_Election,file="../data/Legislative_Election.rdata")
 ```
 
 ## Parties
@@ -69,8 +63,7 @@ who_won %>%
   kable()
 ```
 
-``` {r ggplot-who-won}
-
+```{r ggplot-who-won}
 ggplot(who_won,
        aes(reorder(PartyNm, n),
            n)) +
@@ -85,15 +78,14 @@ ggplot(who_won,
 
 ## Total votes
 
-``` {r total-votes}
+```{r total-votes}
 totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
 totalvotes <- totalvotes %>% tbl_df()
-#save(totalvotes, file = "../data/totalvotes.rdata")
 ```
 
 ## Party receiving the most votes in the Legislative Election
 
-``` {r total-votes2}
+```{r total-votes2}
 totalvotes <- 
   totalvotes %>% 
   mutate(Votes = as.numeric(Votes))
@@ -110,7 +102,7 @@ total_votes_for_parties %>%
   kable
 ```
 
-``` {r ggplot-total-votes}
+```{r ggplot-total-votes}
 ggplot(total_votes_for_parties,
        aes(reorder(PartyNm, tvotes),
            tvotes)) +
@@ -125,13 +117,12 @@ ggplot(total_votes_for_parties,
 
 ## Party getting the highest number of seats in Parliament 
 
-``` {r totalseats}
+```{r totalseats}
 Totalseats <- read.csv(here::here("data-raw/Totalseats.csv"))
 Totalseats <- Totalseats %>% tbl_df()
-#save(Totalseats, file = "../data/Totalseats.rdata")
 ```
 
-``` {r Total-seats-for-parties}
+```{r Total-seats-for-parties}
 Totalseats <-
   Totalseats %>%
   mutate(Totseats = as.numeric(Totseats))
@@ -148,7 +139,7 @@ Total_seats_for_parties  %>%
   kable
 ```
 
-``` {r ggplot-Total-seats-for-parties}
+```{r ggplot-Total-seats-for-parties}
 ggplot(Total_seats_for_parties,
        aes(reorder(PartyNm, tot_seats),
            tot_seats)) +
@@ -163,7 +154,7 @@ ggplot(Total_seats_for_parties,
 
 ## Provinces getting the most seats in parliament
 
-``` {r Total-seats-for-provinces}
+```{r Total-seats-for-provinces}
 Total_seats_for_provinces <- 
   Totalseats %>%
   select(Provinces, Totseats) %>%
@@ -176,7 +167,7 @@ Total_seats_for_provinces %>%
   kable
 ```
 
-``` {r ggplot-Total-seats-for-provinces}
+```{r ggplot-Total-seats-for-provinces}
 ggplot(Total_seats_for_provinces,
        aes(reorder(Provinces, tot_seats),
            tot_seats)) +
@@ -222,6 +213,8 @@ who_won_most_votes_prop %>%
   head %>%
   kable
 ```
+
+
 ```{r who-won-least-votes}
 who_won_least_votes_prop <-
   totalvotes %>%
@@ -279,33 +272,30 @@ P %>%
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
 
-```{r shapefile}
-library(rgdal)
-library(sp)
-library(ggthemes)
-library(ggmap)
-library(ggplot2)
-library(mapproj)
-library(broom)
-library(maptools)
-library(plyr)
-library(dplyr)
-require(sp)
-?sp::merge
+```{r}
+library(sf)
+library(stringr)
+postcode <- 
+  st_read(here::here("vignettes/Shapefile/INDONESIA_PROP.shp")) %>% 
+   mutate(Propinsi = tolower(Propinsi))
 
-# Read in shapefile of provinces
-# Shapefile obtained from: http://www.info-geospasial.com/2015/10/data-shp-seluruh-indonesia.html?m=1
-postcode <- readOGR("../Shapefile/INDONESIA_PROP.shp")
-postcode@data$ID <- rownames(postcode@data)
-totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
-map.winners <- merge(postcode, totalvotes, by.x="Propinsi", by.y="Electorate")
-map.winners@data$ID <- rownames(map.winners@data)
-#groupping
-map.winners$PartyNm <- map.winners$PartyNm
-partycolours = c("#FF0033", "#000000", "#CC3300", "#0066CC", "#FFFF00", "#009900")
-ggplot(data = map.winners) +
-  geom_polygon(aes(x=long, y=lat, group=group, fill= PartyNm)) +
-  scale_fill_manual(name= "Election party", values=partycolours) +
-  theme_map() + coord_equal() + theme(legend.position = "bottom")
+totalvotes <-
+  readr::read_csv(here::here("data-raw/Total Votes percandidates.csv"))  %>% 
+  mutate(Propinsi = tolower(str_trim(str_remove_all(Electorate, 
+                                   paste0(as.roman(c(1:10)), collapse = "|")))))
+map_winners <- 
+  left_join(postcode, 
+            totalvotes) %>% 
+  filter(!is.na(PartyNm))
+
+ggplot() +
+  geom_sf(data = map_winners,
+          aes(
+    fill = PartyNm
+  )) +
+  scale_fill_viridis_d(name = "Election party") +
+  coord_sf() +
+  theme(legend.position = "bottom")
 
 ```
+
