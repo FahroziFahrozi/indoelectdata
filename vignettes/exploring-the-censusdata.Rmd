@@ -143,7 +143,7 @@ ggplot(IDNS2010[1:6,],
   theme(legend.position = "none")
 ```
 
-## Party receiving the most votes in the Legislative Election
+## Population Men
 
 ```{r PopulationMen}
 ggplot(IDNS2010[1:6,],
@@ -159,6 +159,7 @@ ggplot(IDNS2010[1:6,],
   labs(x = "Province", y = "Population Men") 
   
 ```
+#Population Women
 
 ```{r PopulationWomen}
 ggplot(IDNS2010[1:6,],
