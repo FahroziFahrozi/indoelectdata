@@ -1,0 +1,202 @@
+---
+title: "Exploring the census data Indonesia 2010"
+author: "Fahrozi" 
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{exploring-the-census data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+## Exploring the Indonesia census data 2010
+
+This vignette documents used how to access and explore the census data in Indonesia in 2010, using the lastest census data update 2015, and shows a few interesting varibles to visualization and exploring.
+
+##
+
+## Import csv files
+
+```{r import-data}
+library(tidyverse)
+library(readxl)
+library(knitr)
+library(ggplot2)
+
+IDN_Codearea <- read_csv (here::here("data-raw/2015 Census Data Indonesia/Code Area.csv"))
+IDN_Household <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Household 2015.csv"))
+IDN_Income <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Income based on type of jobs.csv"))
+IDN_Medianage <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Median age female married.csv"))
+IDN_Rcpr <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Ratio of Crude Participation Rate in univ 2015.csv"))
+IDN_Population <- read_csv(here::here("data-raw/2015 Census Data Indonesia/TotalPopulation.csv"))
+IDN_Unemployment <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Unemployment rate.csv"))
+IDN_PopuProjection <- read_csv(here::here("data-raw/2015 Census Data Indonesia/indo_12  population projection 2015.csv"))
+
+new <- IDN_Household %>% mutate(
+  ID = substr(CA2015, 3, 4),
+  
+  #IDNS01
+  PopulationIDN = IDN_Population$total,
+  PopulationMen = IDN_Population$Men,
+  PopulationWomen = IDN_Population$Women,
+  
+  #IDNS02
+  Household = IDN_Household$TotalHousehold,
+  
+  #IDNS03
+  Incomeff = IDN_Income$farmersandfisherman,
+  Incomemerchant = IDN_Income$merchant,
+  Incomegov = IDN_Income$governmentemployees,
+  Incomepriv = IDN_Income$privateemployees,
+  Incomeentrep = IDN_Income$entrepreneur,
+  Incomefreelancer = IDN_Income$freelancer,
+  
+  #IDNS04
+  Medianage = IDN_Medianage$Medianage,
+  
+  #IDNS05
+  RatioParticp = IDN_Rcpr$RCPR2015,
+  
+  #IDNS06
+  Unemployment2015 = IDN_Unemployment$Unemploymentrate2015,
+  Unemployment2016 = IDN_Unemployment$Unemploymentrate2016,
+  Unemployment2017 = IDN_Unemployment$Unemploymentrate2017,
+  Unemployment2018 = IDN_Unemployment$Unemploymentrate2018,
+  
+  #IDNS07
+  PopulationProjection2010 = IDN_PopuProjection$Populationprojection2010,
+  PopulationProjection2015 = IDN_PopuProjection$Populationprojection2015,
+  PopulationProjection2020 = IDN_PopuProjection$Populationprojection2020,
+  PopulationProjection2025 = IDN_PopuProjection$Populationprojection2025,
+  PopulationProjection2030 = IDN_PopuProjection$Populationprojection2030,
+  PopulationProjection2035 = IDN_PopuProjection$Populationprojection2035)
+  
+  #Join two dataset
+  codearea <- IDN_Codearea
+  new <- new %>% mutate(ID =as.numeric(ID))%>%
+    left_join(codearea,new, by = "ID")
+    
+  
+  IDNS2010 <- new %>%
+    filter(!is.na(Province)) %>%
+    select(-c(ends_with("_U"), ends_with("_H"), CA2015))
+    
+  IDNS2010 <- IDNS2010 %>%
+    select(ID, Province, PopulationIDN, everything())%>%
+    mutate(ID = as.numeric(ID))
+
+IDNS2010 <- IDNS2010 %>% tbl_df()
+```
+
+## Dimensions
+
+``` {r dimensions}
+dim(IDNS2010)
+```
+
+## preview some of the data
+
+```{r Preview some of the data}
+IDNS2010 %>%
+  select(Province,PopulationIDN, PopulationMen, PopulationWomen, PopulationProjection2010, PopulationProjection2035, Incomegov, Medianage, Unemployment2015) %>%
+  head(IDNS2010, 10) %>%
+  kable()
+```
+
+```{r ggplot-Unemploymentrate}
+ggplot(IDNS2010[1:6,],
+       aes(x = reorder(Province, -Unemployment2015),
+           y = Unemployment2015,
+           colour = Province))+
+  geom_boxplot() +
+  labs(x = "Province",
+       y = "% Unemployment") +
+  theme_minimal() +
+  theme(legend.position = "none")
+  
+```
+
+## Total votes
+## mostly people in Indonesia working as gov employee, and they said that be a government employee is the goal job, so in this part, in this interesting to show about the income for govenrment employees based on ID area
+
+```{r Income}
+ggplot(IDNS2010[1:6,],
+       aes(x = reorder(ID, -Incomegov),
+           y = Incomegov,
+           colour = ID))+
+  geom_boxplot() +
+  geom_jitter(alpha = 0.35,
+              size = 2,
+              width = 0.3) +
+  labs(x = "ID",
+       y = "Incomegov (RP)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Party receiving the most votes in the Legislative Election
+
+```{r PopulationMen}
+ggplot(IDNS2010[1:6,],
+       aes(x = reorder(Province, -PopulationMen),
+           y = PopulationMen,
+           colour = Province))+
+  geom_boxplot() +
+  geom_jitter(alpha = 0.35,
+              size = 2,
+              width = 0.3) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "Province", y = "Population Men") 
+  
+```
+
+```{r PopulationWomen}
+ggplot(IDNS2010[1:6,],
+       aes(x = reorder(Province, -PopulationWomen),
+           y = PopulationWomen,
+           colour = Province))+
+  geom_boxplot() +
+  geom_jitter(alpha = 0.35,
+              size = 2,
+              width = 0.3) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "Province", y = "Population women")
+```
+
+## in this part to see how the population projection in 2010, 2020, and 2025
+
+```{r totalseats}
+
+IDNS <- IDNS2010 %>%
+  select(PopulationProjection2010, 
+         PopulationProjection2020, 
+         PopulationProjection2025) %>%
+  gather(key = "Projection",
+        value = "total") 
+  
+  ggplot(data = IDNS,
+         aes(x = reorder(Projection, -total),
+             y = total,
+             colour = Projection)) +
+  geom_jitter(alpha = 0.35,
+              size = 2,
+              width = 0.3) +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "population projection", y = "total")
+  
+```
+
+
+
