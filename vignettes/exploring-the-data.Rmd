@@ -45,8 +45,7 @@ Legislative_Election <- Legislative_Election %>% tbl_df()
 ```
 
 ## Parties
-
-``` {r echo=FALSE, include=TRUE}
+```{r echo=FALSE, include=TRUE}
 glimpse(Legislative_Election) %>% head %>% kable
 ```
 
@@ -272,6 +271,7 @@ P %>%
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
 
+@Fahrozi - see suggested change in chunk below this. You will need to add the voting data to `nat_data` that you would like to use in the plot. Each row in `nat_data` corresponds with a single region (polygon) from `nat_map`.
 ```{r}
 library(sf)
 library(stringr)
@@ -298,4 +298,50 @@ ggplot() +
   theme(legend.position = "bottom")
 
 ```
+
+```{r}
+library(rgdal)
+library(rgeos)
+library(ggthemes)
+
+# Read in shapefile
+my_map <- readOGR("Shapefile/INDONESIA_PROP.shp") 
+
+# Fortify (ggplot2 object)
+nat_map <- ggplot2::fortify(my_map %>% gSimplify(tol = 0.001))
+
+# Add some details to differentiate between group and piece
+nat_map$group <- paste("g",nat_map$group,sep=".")
+nat_map$piece <- paste("p",nat_map$piece,sep=".")
+
+# Add Propinsi names
+nms <- my_map@data %>% select(ID, Propinsi) %>% rename(id = ID) %>% mutate(id = as.numeric(id) - 1)
+nat_map$id <- as.numeric(nat_map$id)
+nat_map <- left_join(nat_map, nms, by="id")
+
+# Get centroids for each region
+polys <- as(my_map, "SpatialPolygons")
+
+library(purrr)
+centroid <- function(i, polys) {
+  ctr <- sp::Polygon(polys[i])@labpt
+  data.frame(long_c=ctr[1], lat_c=ctr[2])
+}
+
+centroids <- seq_along(polys) %>% purrr::map_df(centroid, polys=polys)
+
+# Load nat_data
+### NOTE: ADD DATA TO THE `nat_data` DATAFRAME THAT YOU WANT TO USE IN THE PLOT
+### NOTE: THE `nat_map` CONTAINS THE POLYGONS AND `nat_data` CONTAINS THE DATA
+nat_data <- my_map@data %>% rename(id = ID)
+nat_data <- data.frame(nat_data, centroids)
+
+# Plot
+ggplot(aes(map_id=id), data=nat_data) +
+  geom_map(aes(fill = Propinsi), map=nat_map) +
+  expand_limits(x=nat_map$long, y=nat_map$lat) + 
+  theme_map() + coord_equal() +
+  guides(fill = F)
+```
+
 
