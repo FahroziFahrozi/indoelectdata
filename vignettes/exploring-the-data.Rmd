@@ -270,8 +270,6 @@ P %>%
 
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
-
-@Fahrozi - see suggested change in chunk below this. You will need to add the voting data to `nat_data` that you would like to use in the plot. Each row in `nat_data` corresponds with a single region (polygon) from `nat_map`.
 ```{r}
 library(sf)
 library(stringr)
@@ -296,6 +294,7 @@ ggplot() +
   scale_fill_viridis_d(name = "Election party") +
   coord_sf() +
   theme(legend.position = "bottom")
+
 
 ```
 
@@ -333,15 +332,23 @@ centroids <- seq_along(polys) %>% purrr::map_df(centroid, polys=polys)
 # Load nat_data
 ### NOTE: ADD DATA TO THE `nat_data` DATAFRAME THAT YOU WANT TO USE IN THE PLOT
 ### NOTE: THE `nat_map` CONTAINS THE POLYGONS AND `nat_data` CONTAINS THE DATA
+totalvotes <- totalvotes %>% select(Votes)
 nat_data <- my_map@data %>% rename(id = ID)
-nat_data <- data.frame(nat_data, centroids)
+nat_data <- data.frame(centroids, nat_data, totalvotes)
 
 # Plot
-ggplot(aes(map_id=id), data=nat_data) +
-  geom_map(aes(fill = Propinsi), map=nat_map) +
+ggplot(aes(map_id= id), data= nat_data) + 
+  geom_map(aes(fill = Propinsi), map= nat_map) +
   expand_limits(x=nat_map$long, y=nat_map$lat) + 
   theme_map() + coord_equal() +
   guides(fill = F)
+
+#plot voting
+ggplot(aes(map_id= id), data= nat_data) + 
+  geom_map(aes(fill = Votes), map= nat_map) +
+  expand_limits(x=nat_map$long, y=nat_map$lat) + 
+  theme_map() + coord_equal()
+
 ```
 
 
