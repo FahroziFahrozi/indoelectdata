@@ -61,11 +61,11 @@ new <- IDN_Household %>% mutate(
     
   
   IDNS2010 <- new %>%
-    filter(!is.na(Province.x)) %>%
+    filter(!is.na(Provinces)) %>%
     select(-c(ends_with("_U"), ends_with("_H"), CA2015))
     
   IDNS2010 <- IDNS2010 %>%
-    select(ID, Province, PopulationIDN, everything())%>%
+    select(ID, Provinces, PopulationIDN, everything())%>%
     mutate(ID = as.numeric(ID))
 
     

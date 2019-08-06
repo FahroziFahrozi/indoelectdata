@@ -332,9 +332,9 @@ centroids <- seq_along(polys) %>% purrr::map_df(centroid, polys=polys)
 # Load nat_data
 ### NOTE: ADD DATA TO THE `nat_data` DATAFRAME THAT YOU WANT TO USE IN THE PLOT
 ### NOTE: THE `nat_map` CONTAINS THE POLYGONS AND `nat_data` CONTAINS THE DATA
-totalvotes <- totalvotes %>% select(Votes)
+totalseats <- Total_seats_for_provinces %>% slice(1:32) %>% select(tot_seats)
 nat_data <- my_map@data %>% rename(id = ID)
-nat_data <- data.frame(centroids, nat_data, totalvotes)
+nat_data <- data.frame(centroids, nat_data, totalseats)
 
 # Plot
 ggplot(aes(map_id= id), data= nat_data) + 
@@ -343,12 +343,83 @@ ggplot(aes(map_id= id), data= nat_data) +
   theme_map() + coord_equal() +
   guides(fill = F)
 
-#plot voting
+#plot total seats for provinces
 ggplot(aes(map_id= id), data= nat_data) + 
-  geom_map(aes(fill = Votes), map= nat_map) +
+  geom_map(aes(fill = tot_seats ), map= nat_map) +
   expand_limits(x=nat_map$long, y=nat_map$lat) + 
   theme_map() + coord_equal()
 
 ```
+#how do election results correlate with Census data?
+```{r Election_correlate_census}
+combined <- sort(union(levels(totalvotes$Provinces), levels(IDNS2010$Provinces)))
+census_and_electionIDN <- left_join(mutate(totalvotes, Provinces=factor(Provinces, levels=combined)),
+                      mutate(IDNS2010, Provinces=factor(Provinces, levels=combined)))
+  
+#subset only the columns we want for the model
+census_and_election_subset <-
+  census_and_electionIDN %>%
+  ungroup %>%
+  select(Provinces,
+         Votes,
+         PopulationIDN:PopulationProjection2035) %>%
+  rename(tot_votes = Votes) %>%
+  distinct(Provinces, .keep_all = TRUE)
 
+census_and_election_subsetplot <- census_and_election_subset %>%
+  ungroup %>%
+  select(tot_votes,
+         PopulationIDN:PopulationProjection2035)
 
+census_and_election_subsetplot$tot_votes <- as.numeric(census_and_election_subsetplot$tot_votes)
+census_and_election_subsetplot$Medianage <- as.numeric(census_and_election_subsetplot$Medianage)
+  
+library(broom)
+library(purrrlyr)
+
+library(corrplot)
+IDN <- cor(census_and_election_subsetplot [, c(2:ncol(census_and_election_subsetplot))],
+         use = "pairwise.complete.obs")
+corrplot.mixed(IDN,
+               lower = "ellipse",
+               upper = "number",
+               tl.pos = "lt",
+               tl.cex = 0.5,
+               tl.col = "black",
+               number.cex= 0.5)
+
+#more readable numbers
+
+options(scipen = 10) 
+census_variables <- names(IDNS2010)[-c(1:3)]
+
+#compute the multiple regressions
+census_and_electionIDN$Votes <- as.numeric(census_and_electionIDN$Votes)
+census_and_electionIDN$Medianage <- as.numeric(census_and_electionIDN$Medianage)
+
+multiple_regression_model <-
+  census_and_electionIDN %>%
+  ungroup %>%
+  select(
+    Votes,
+    PopulationIDN:PopulationProjection2035) %>%
+  lm(Votes ~ .,
+     data = .)
+
+multiple_regression_model %>%
+  glance %>%
+  dmap(round, 3) %>%
+  kable
+
+```
+```{r model}
+#find the variables with a significant effect
+
+multiple_regression_model %>% 
+  tidy %>%
+  filter(p.value < 0.05) %>%
+  dmap_if (is.numeric, round, 3) %>%
+  arrange(p.value) %>%
+  kable
+
+```
