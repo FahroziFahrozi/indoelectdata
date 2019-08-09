@@ -87,11 +87,11 @@ new <- IDN_Household %>% mutate(
     
   
   IDNS2010 <- new %>%
-    filter(!is.na(Province)) %>%
+    filter(!is.na(Provinces)) %>%
     select(-c(ends_with("_U"), ends_with("_H"), CA2015))
     
   IDNS2010 <- IDNS2010 %>%
-    select(ID, Province, PopulationIDN, everything())%>%
+    select(ID, Provinces, PopulationIDN, everything())%>%
     mutate(ID = as.numeric(ID))
 
 IDNS2010 <- IDNS2010 %>% tbl_df()
@@ -107,18 +107,20 @@ dim(IDNS2010)
 
 ```{r Preview some of the data}
 IDNS2010 %>%
-  select(Province,PopulationIDN, PopulationMen, PopulationWomen, PopulationProjection2010, PopulationProjection2035, Incomegov, Medianage, Unemployment2015) %>%
-  head(IDNS2010, 10) %>%
+  select(Provinces,PopulationIDN, PopulationMen, PopulationWomen, PopulationProjection2010, PopulationProjection2035, Incomegov, Medianage, Unemployment2015) %>%
+  head(10) %>%
   kable()
+
+save(IDNS2010, file = '../data/IDNS2010.rdata')
 ```
 
 ```{r ggplot-Unemploymentrate}
 ggplot(IDNS2010[1:6,],
-       aes(x = reorder(Province, -Unemployment2015),
+       aes(x = reorder(Provinces, -Unemployment2015),
            y = Unemployment2015,
-           colour = Province))+
+           colour = Provinces))+
   geom_boxplot() +
-  labs(x = "Province",
+  labs(x = "Provinces",
        y = "% Unemployment") +
   theme_minimal() +
   theme(legend.position = "none")
@@ -147,32 +149,32 @@ ggplot(IDNS2010[1:6,],
 
 ```{r PopulationMen}
 ggplot(IDNS2010[1:6,],
-       aes(x = reorder(Province, -PopulationMen),
+       aes(x = reorder(Provinces, -PopulationMen),
            y = PopulationMen,
-           colour = Province))+
+           colour = Provinces))+
   geom_boxplot() +
   geom_jitter(alpha = 0.35,
               size = 2,
               width = 0.3) +
   theme_minimal() +
   theme(legend.position = "none") +
-  labs(x = "Province", y = "Population Men") 
+  labs(x = "Provinces", y = "Population Men") 
   
 ```
 #Population Women
 
 ```{r PopulationWomen}
 ggplot(IDNS2010[1:6,],
-       aes(x = reorder(Province, -PopulationWomen),
+       aes(x = reorder(Provinces, -PopulationWomen),
            y = PopulationWomen,
-           colour = Province))+
+           colour = Provinces))+
   geom_boxplot() +
   geom_jitter(alpha = 0.35,
               size = 2,
               width = 0.3) +
   theme_minimal() +
   theme(legend.position = "none") +
-  labs(x = "Province", y = "Population women")
+  labs(x = "Provinces", y = "Population women")
 ```
 
 ## in this part to see how the population projection in 2010, 2020, and 2025
