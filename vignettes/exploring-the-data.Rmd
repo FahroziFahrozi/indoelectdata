@@ -270,7 +270,7 @@ P %>%
 
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
-```{r}
+```{r removethis, eval = F, include = F}
 library(sf)
 library(stringr)
 postcode <- 
@@ -298,7 +298,7 @@ ggplot() +
 
 ```
 
-```{r}
+```{r usethis}
 library(rgdal)
 library(rgeos)
 library(ggthemes)
@@ -352,6 +352,7 @@ ggplot(aes(map_id= id), data= nat_data) +
 ```
 #how do election results correlate with Census data?
 ```{r Election_correlate_census}
+load('../data/IDNS2010.rdata')
 combined <- sort(union(levels(totalvotes$Provinces), levels(IDNS2010$Provinces)))
 census_and_electionIDN <- left_join(mutate(totalvotes, Provinces=factor(Provinces, levels=combined)),
                       mutate(IDNS2010, Provinces=factor(Provinces, levels=combined)))
