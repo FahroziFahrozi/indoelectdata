@@ -271,7 +271,7 @@ P %>%
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
 
-```{r plottotal_seats_eachprovinces}
+```{r plot_totalseats_eachprovinces}
 library(rgdal)
 library(rgeos)
 library(ggthemes)
