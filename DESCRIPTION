@@ -16,3 +16,27 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
+Imports:
+    broom ,
+    corrplot ,
+    cowplot ,
+    csv ,
+    dplyr ,
+    ggplot2 ,
+    ggthemes ,
+    here,
+    NLP,
+    plyr ,
+    purrr ,
+    purrrlyr ,
+    RColorBrewer,
+    readxl ,
+    rgdal,
+    rgeos,
+    scales ,
+    sp,
+    tidyverse ,
+    tm,
+    twitteR ,
+    wordcloud,
+    RSentiment
