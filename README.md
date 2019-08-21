@@ -1,6 +1,6 @@
 # Indoelectdata
 
-The purpose of this package is to make available data from the Indonedian General Election of 2014. The package was created by Fahrozi for a Google Summer of Code Project in 2019, with assistence from Jeremy Forbes and Ben Marwick
+The purpose of this package is to make available data from the Indonesian General Election of 2014. The package was created by Fahrozi for a Google Summer of Code Project in 2019, with assistence from Jeremy Forbes and Ben Marwick
 
 ## Background
 
