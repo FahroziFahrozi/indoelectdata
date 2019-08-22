@@ -1,14 +1,14 @@
 Package: indoelectdata
-Title: What the Package Does (One Line, Title Case)
+Title: Exploring and visualization the election data for Indonesia
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Fahrozi",
            family = "Fahrozi",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "ozifahrozi2@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-6778-0561"))
+Description: data used from Indonesia Central Bureau of Statistics, and Indonesia Electoral Commision 2014. in this package includes tools for exploring and visualizing data including Twitter sentiment analysis from tweets on Twitter, as well as exploring census data in Indonesia. in this package incorporates data that is copyright Indonesia Electoral commision and Indonesia Bureau of Statistics for data 2010-2015.
+License: https://cran.r-project.org/web/licenses/GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
