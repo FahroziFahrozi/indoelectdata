@@ -5,3 +5,6 @@
 inst/doc
 *.Rproj
 .httr-oauth
+indoelectdata.Rcheck/
+indoelectdata*.tar.gz
+indoelectdata*.tgz

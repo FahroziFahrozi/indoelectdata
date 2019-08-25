@@ -5,7 +5,7 @@
 
 library(twitteR)
 library(RSentiment)
-#library(sentiment)
+library(sentiment)
 library(tm)
 library(NLP)
 library(Rstem)
@@ -22,7 +22,7 @@ access_token_secret<-""
 
 #remove the hastags and other twitter handles
 setup_twitter_oauth(api_key, api_secret,access_token, access_token_secret)
-some_tweets = searchTwitter("pemilu legislatif", n=10000, lang="id")
+some_tweets = searchTwitter("pemilu legislatif", n=100000, lang="id")
 some_txt = sapply(some_tweets, function(x) x$getText())
 some_txt = gsub("(RT|via)((?:\\b\\W*@\\w+)+)", "", some_txt)
 some_txt = gsub("@\\w+", "", some_txt)
@@ -49,7 +49,7 @@ polarity = class_pol[,4]
 
 #contains tweets about the keyword"pemilu legislatif"
 sentiment_df = data.frame(text=some_txt, emotion=emotion,
-                     polarity=polarity, stringsAsFactors=FALSE)
+                     polarity=polarity, stringsAsFactors=TRUE)
 sentiment_df = within(sentiment_df,
                  emotion <- factor(emotion, levels=names(sort(table(emotion), decreasing=TRUE))))
 

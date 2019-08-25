@@ -74,10 +74,10 @@ ggplot(who_won,
   scale_y_continuous(labels = comma) +
   theme_bw() +
   ylab("Total number of electorates") +
-  xlab("Party") +
+  xlab("Political Parties") +
   theme(text = element_text(size = 8))
 ```
-This result above matches with the official legislative election result in Indonesia 2014, showing that PDIP party winning the most (109)
+The result above matches with the official legislative election result in Indonesia 2014, showing that PDIP party winning the most (109)
 
 
 ## Party receiving the most votes in the Legislative Election
@@ -112,13 +112,13 @@ ggplot(total_votes_for_parties,
   scale_y_continuous(labels = comma) +
   theme_bw() +
   ylab("Total votes") +
-  xlab("Party") +
+  xlab("Political Parties") +
   theme(text = element_text(size = 8))
 ```
 
 ## Party getting the highest number of seats in Parliament 
 
-in this part to see the party that getting the higest number of seats in parliament, like this:
+in this part we can see the party that getting the higest number of seats in parliament.
 
 ```{r Total-seats-for-parties}
 Totalseats <-
@@ -148,7 +148,7 @@ ggplot(Total_seats_for_parties,
   scale_y_continuous(labels = comma) +
   theme_bw() +
   ylab("Total seats") +
-  xlab("Party") +
+  xlab("Political Parties") +
   theme(text = element_text(size=8))
 ```
 
@@ -327,7 +327,7 @@ ggplot(aes(map_id= id), data= nat_data) +
   guides(fill = F) +
   labs ( title = "Total seats for provinces in Election 2014 ",
          subtitle = "The mapping of the provinces who got the highest number of seats in Legislative Election 2014",
-         caption= "source : Indonesia Central Bureau of Statistics")
+         caption= "data source : Indonesia Central Bureau of Statistics")
 
 #plot total seats for provinces
 ggplot(aes(map_id= id), data= nat_data) + 
@@ -336,7 +336,7 @@ ggplot(aes(map_id= id), data= nat_data) +
   theme_map() + coord_equal() +
   labs ( title = "Total seats for provinces in Election 2014 ",
          subtitle = "The mapping of the provinces who got the highest number of seats in Legislative Election 2014",
-         caption= "source : Indonesia Central Bureau of Statistics")
+         caption= "data source : Indonesia Central Bureau of Statistics")
 
 ```
 in this part to answer the question how the election result correlate with census data, we want to know whether there is positive correlation or negative correlation.

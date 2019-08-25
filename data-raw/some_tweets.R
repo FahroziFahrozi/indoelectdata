@@ -22,6 +22,26 @@ access_token_secret<-""
 
 #remove the hastags and other twitter handles
 setup_twitter_oauth(api_key, api_secret,access_token, access_token_secret)
-some_tweets = searchTwitter("pemilu legislatif", n=10000, lang="id")
+some_tweets = searchTwitter("pemilu legislatif", n=100000, lang="id")
+some_txt = sapply(some_tweets, function(x) x$getText())
+some_txt = gsub("(RT|via)((?:\\b\\W*@\\w+)+)", "", some_txt)
+some_txt = gsub("@\\w+", "", some_txt)
+some_txt = gsub("[[:punct:]]", "", some_txt)
+some_txt = gsub("[[:digit:]]", "", some_txt)
+some_txt = gsub("http\\w+", "", some_txt)
+some_txt = gsub("[ \t]{2,}", "", some_txt)
+some_txt = gsub("^\\s+|\\s+$", "", some_txt)
+try.error = function(x)
+{
+  y = NA
+  try_error = tryCatch(tolower(x), error=function(e) e)
+  if (!inherits(try_error, "error"))
+    y = tolower(x)
+  return(y) }
+some_txt = sapply(some_txt, try.error)
+some_txt = some_txt[!is.na(some_txt)]
+names(some_txt) = NULL
 
-save(some_tweets, file = "data/some_tweets.rdata")
+some_tweets = data.frame(text=some_txt)
+                          
+save(some_tweets, file = "data/Some_tweets.rdata")

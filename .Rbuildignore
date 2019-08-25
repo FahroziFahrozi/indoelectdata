@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 ^data-raw$
 ^\.httr-oauth$
+^indoelectdata\.Rcheck$
+^indoelectdata.*\.tar\.gz$
+^indoelectdata.*\.tgz$

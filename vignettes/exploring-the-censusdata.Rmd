@@ -32,13 +32,51 @@ library(readxl)
 library(knitr)
 library(ggplot2)
 library(cluster.datasets)
+library(indoelectdata)
 
 data(IDNS2010)
 ```
 in this part to answer the question which provinces has the high unemployement rate in Indonesia
+```{r make-data-dictionary, include = FALSE}
+data_dictionary <- data.frame(
+  Variable = names(IDNS2010), 
+  details= c(
+    "ID",
+    "Provinces", 
+    "PopulationIDN",
+    "TotalHousehold",
+    "PopulationMen",
+    "PopulationWomen",
+    "Household",
+    "Incomeff",
+    "Incomemerchant",
+    "Incomegov",
+    "Incomepriv",
+    "Incomeentrep",
+    "Incomefreelancer",
+    "Medianage",
+    "RatioParticp",
+    "Unemployment2015",
+    "Unemployment2016",
+    "Unemployment2017",
+    "Unemployment2018",
+    "PopulationProjection2010",
+    "PopulationProjection2015",
+    "PopulationProjection2020",
+    "PopulationProjection2025",
+    "PopulationProjection2030",
+    "PopulationProjection2035",
+    "No"
+    ))
+```
 
+```{r display-data-dictionary, echo = FALSE}
+library(knitr)
+kable(data_dictionary)
+```
+So let's just look at some nice and simple plots using `ggplot2`.
 ```{r ggplot-Unemploymentrate}
-ggplot(IDNS2010[1:6,],
+ggplot(data=IDNS2010[1:6,],
        aes(x = reorder(Provinces, -Unemployment2015),
            y = Unemployment2015,
            colour = Provinces))+
@@ -56,7 +94,7 @@ the results above showed that province Aceh has the high percentage for unempoly
 ## mostly people in Indonesia working as gov employee, and they said that be a government employee is the goal job, so in this part, in this interesting to show about the income for govenrment employees based on ID area
 
 ```{r Income}
-ggplot(IDNS2010[1:6,],
+ggplot(data=IDNS2010[1:6,],
        aes(x = reorder(ID, -Incomegov),
            y = Incomegov,
            colour = ID))+
@@ -76,7 +114,7 @@ from the result above showed that province Banten with ID area (16) has the high
 in this part we want to see which provinces has the highest men population in Indonesia
 
 ```{r PopulationMen}
-ggplot(IDNS2010[1:6,],
+ggplot(data=IDNS2010[1:6,],
        aes(x = reorder(Provinces, -PopulationMen),
            y = PopulationMen,
            colour = Provinces))+
@@ -98,7 +136,7 @@ Province of Sumatera Utara has the highest men population in Indonesia
 in this part we want to see which provinces has the highest women population in Indonesia
 
 ```{r PopulationWomen}
-ggplot(IDNS2010[1:6,],
+ggplot(data= IDNS2010[1:6,],
        aes(x = reorder(Provinces, -PopulationWomen),
            y = PopulationWomen,
            colour = Provinces))+

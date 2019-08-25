@@ -40,4 +40,5 @@ Imports:
     tm,
     twitteR ,
     wordcloud,
+    cluster.datasets,
     RSentiment
