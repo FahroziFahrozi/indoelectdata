@@ -10,7 +10,7 @@ In Indonesia, elections are a matter of great waiting because it is a party of d
 
 Among the many packages available for R, there is a package called eechidna (Exploring Election and Census Highly Informative Data Nationally for Australia). This package makes it easy to look at the data from several years worth of Australian Censuses and Federal Elections. Functions in the package can be used to pull the most recent election and Census data, and future changes. \[1\].
 
-The main goal of my project is to explore the elections and census data from The Indonesian Central Bureau of Statistics (BPS). I will explore and make a visualization of Legislative and presidential elections data on 2014.
+The main goal of my project is to explore the elections and census data from The Indonesian Central Bureau of Statistics (BPS). I will explore and make a visualization of Legislative elections data on 2014, includes exploring the census data and make the Twitter sentiment analysis from tweets on twitter, use offical twitter API's.
 
 Proposal: https://github.com/rstats-gsoc/gsoc2019/wiki/Exploring-Election-and-Census-Highly-Informative-Data-Nationally-for-Indonesia-(-Eechidna-R-package) 
 
@@ -26,7 +26,7 @@ The eechidna package makes it easy to look at the data from several years worth 
 
 Functions in the package can be used to pull the most recent election and Census data, and future changes. 
 
-In this project I will use Indonesia election data. I will use the election data from the 2014 Legilsative election and Presidential Election, including census data from the Indonesian Statistics office.
+In this project I used Indonesia election data. I used the election data from the 2014 Legislative election including census data from the Indonesian Statistics office, and tweets data from twitter.
 
 Timeline:
 
@@ -62,6 +62,7 @@ Week 7  ( July 15 – July 19)
 Week 8 & Week 9 (July 29 – August 19)
 - [ ]     Discuss with mentors related about work in previous week
 - [ ]     Mapping of Indonesia electoral divisions
+- [ ]     twitter Sentiment Analysis with keywords " Pemilu Legislative"
  
 Week 10 & Week 11 ( August 12 – August 25 )
 - [ ]     Check and evaluate the result for Mapping of Electoral divisions with mentors
