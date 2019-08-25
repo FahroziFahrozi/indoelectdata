@@ -1,5 +1,5 @@
 ---
-title: "Exploring the Indonesian Legislative & Presidential Election of 2014"
+title: "Exploring the Indonesian Legislative of 2014"
 author: "Fahrozi" 
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
@@ -30,7 +30,7 @@ The 2014 Presidential Election were held in Indonesia on 9 July. According to th
 
 ## Import csv files
 
-```{r import-csv}
+```{r load-read-voting, message=FALSE, error=FALSE}
 library(csv)
 library(here)
 library(dplyr)
@@ -40,16 +40,18 @@ library(ggplot2)
 library(scales)
 library(knitr)
 
-Legislative_Election <- read.csv(here::here("data-raw/Party in Legislative Election.csv"))
-Legislative_Election <- Legislative_Election %>% tbl_df()
+data(Legislative_Election)
+data(totalvotes)
+data(Totalseats)
 ```
 
 ## Parties
 ```{r echo=FALSE, include=TRUE}
 glimpse(Legislative_Election) %>% head %>% kable
 ```
-
+##Exploring the election results
 ## Party that won the Legislative Election
+in this part we can summarise the details information about the party that won the legislative Election
 
 ```{r party-who-won}
 who_won <-
@@ -58,10 +60,11 @@ who_won <-
   tally() %>%
   arrange(desc(n))
 
+#inspect
 who_won %>%
   kable()
 ```
-
+#plot the party that won
 ```{r ggplot-who-won}
 ggplot(who_won,
        aes(reorder(PartyNm, n),
@@ -74,17 +77,13 @@ ggplot(who_won,
   xlab("Party") +
   theme(text = element_text(size = 8))
 ```
+This result above matches with the official legislative election result in Indonesia 2014, showing that PDIP party winning the most (109)
 
-## Total votes
-
-```{r total-votes}
-totalvotes <- read.csv(here::here("data-raw/Total Votes percandidates.csv"))
-totalvotes <- totalvotes %>% tbl_df()
-```
 
 ## Party receiving the most votes in the Legislative Election
+in this part is an alternative way to see the party received the most votes in the Legislative election
 
-```{r total-votes2}
+```{r total-votes_for_parties}
 totalvotes <- 
   totalvotes %>% 
   mutate(Votes = as.numeric(Votes))
@@ -97,9 +96,12 @@ total_votes_for_parties <-
   ungroup() %>%
   arrange(desc(tvotes))
 
+#inspect
 total_votes_for_parties %>%
   kable
 ```
+the result above shows a similar result, which the PDIP party received the most ordinary votes.
+and can show in the plot below:
 
 ```{r ggplot-total-votes}
 ggplot(total_votes_for_parties,
@@ -116,10 +118,7 @@ ggplot(total_votes_for_parties,
 
 ## Party getting the highest number of seats in Parliament 
 
-```{r totalseats}
-Totalseats <- read.csv(here::here("data-raw/Totalseats.csv"))
-Totalseats <- Totalseats %>% tbl_df()
-```
+in this part to see the party that getting the higest number of seats in parliament, like this:
 
 ```{r Total-seats-for-parties}
 Totalseats <-
@@ -134,9 +133,11 @@ Total_seats_for_parties <-
   ungroup() %>%
   arrange(desc(tot_seats))
 
+#inspect
 Total_seats_for_parties  %>%
   kable
 ```
+from the result above shows that PDIP Party getting the number of seats in Indonesia Parliament, and we can see in the plot below
 
 ```{r ggplot-Total-seats-for-parties}
 ggplot(Total_seats_for_parties,
@@ -153,6 +154,8 @@ ggplot(Total_seats_for_parties,
 
 ## Provinces getting the most seats in parliament
 
+this is the interesting part, we can see which provinces getting the most seats in Indonesia parliament, because 33 provinces joined the Legislative election in 2014
+
 ```{r Total-seats-for-provinces}
 Total_seats_for_provinces <- 
   Totalseats %>%
@@ -165,6 +168,7 @@ Total_seats_for_provinces <-
 Total_seats_for_provinces %>%
   kable
 ```
+From the results above shows that Jawa Barat get the highest number seats in Indonesia Parliament with total 91 seats, we can see from the plot below as well.
 
 ```{r ggplot-Total-seats-for-provinces}
 ggplot(Total_seats_for_provinces,
@@ -178,7 +182,7 @@ ggplot(Total_seats_for_provinces,
   xlab("Provinces") +
   theme(text = element_text(size=8))
 ```
-  
+ in this part to answer the question for details information for each candidates, who did the best
 ## Which candidate did the best?
 ```{r candidate-did-the-best}
 
@@ -197,6 +201,9 @@ total_votes_for_candidate %>%
   head %>% 
   kable
 ```
+the results showed that My Esti Wijayati get the most votes 553
+
+next, we can look at the proportion of votes, in this case we can see who won most votes and who won least votes
 
 ```{r who-won-most-votes}
 who_won_most_votes_prop <-
@@ -212,7 +219,7 @@ who_won_most_votes_prop %>%
   head %>%
   kable
 ```
-
+from the result above we can see that Elnino M Husein Mohi from gorontalo won the most votes proportion.
 
 ```{r who-won-least-votes}
 who_won_least_votes_prop <-
@@ -229,7 +236,7 @@ who_won_least_votes_prop %>%
   head %>%
   kable
 ```
-
+from the result above we can see that Elva Hartati received the smallest proportion votes with 11%
 
 ## How did each electorate vote in each province?
 
@@ -262,14 +269,17 @@ P %>%
                              ProportionPDIP),
                  size = Totalvotes,
                )) +
-        geom_point(size = 4) +
+        geom_point(size = 3) +
         ylab("Electorate") +
-        theme_bw(base_size = 8) +
+        theme_bw(base_size = 7) +
         theme(legend.position="none")
         )) 
 
 cowplot::plot_grid(plotlist = province_plots$province_plots)
 ```
+from  results above shows the plots proportion PDIP party for each electorate/provinces
+
+below will show the map of the total seats for each provinces
 
 ```{r plot_totalseats_eachprovinces}
 library(rgdal)
@@ -314,16 +324,22 @@ ggplot(aes(map_id= id), data= nat_data) +
   geom_map(aes(fill = Propinsi), map= nat_map) +
   expand_limits(x=nat_map$long, y=nat_map$lat) + 
   theme_map() + coord_equal() +
-  guides(fill = F)
+  guides(fill = F) +
+  labs ( title = "Total seats for provinces in Election 2014 ",
+         subtitle = "The mapping of the provinces who got the highest number of seats in Legislative Election 2014",
+         caption= "source : Indonesia Central Bureau of Statistics")
 
 #plot total seats for provinces
 ggplot(aes(map_id= id), data= nat_data) + 
   geom_map(aes(fill = tot_seats ), map= nat_map) +
   expand_limits(x=nat_map$long, y=nat_map$lat) + 
-  theme_map() + coord_equal()
+  theme_map() + coord_equal() +
+  labs ( title = "Total seats for provinces in Election 2014 ",
+         subtitle = "The mapping of the provinces who got the highest number of seats in Legislative Election 2014",
+         caption= "source : Indonesia Central Bureau of Statistics")
 
 ```
-
+in this part to answer the question how the election result correlate with census data, we want to know whether there is positive correlation or negative correlation.
 
 #how do election results correlate with Census data?
 
@@ -390,8 +406,11 @@ multiple_regression_model %>%
   kable
 
 ```
+from the result above we can see that there is negative strong correlation between election and census data because the P-value bigger than 0,05
+
 ```{r model}
 #find the variables with a significant effect
+#in this part we want to find the varialbes with a significant effect
 
 multiple_regression_model %>% 
   tidy %>%
@@ -401,4 +420,4 @@ multiple_regression_model %>%
   kable
 
 ```
-
+the result above showed that the variable Unemployment2018	and Incomeff has the significant effect with election with the p-value less than 0,05

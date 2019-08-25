@@ -31,88 +31,11 @@ library(tidyverse)
 library(readxl)
 library(knitr)
 library(ggplot2)
+library(cluster.datasets)
 
-IDN_Codearea <- read_csv (here::here("data-raw/2015 Census Data Indonesia/Code Area.csv"))
-IDN_Household <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Household 2015.csv"))
-IDN_Income <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Income based on type of jobs.csv"))
-IDN_Medianage <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Median age female married.csv"))
-IDN_Rcpr <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Ratio of Crude Participation Rate in univ 2015.csv"))
-IDN_Population <- read_csv(here::here("data-raw/2015 Census Data Indonesia/TotalPopulation.csv"))
-IDN_Unemployment <- read_csv(here::here("data-raw/2015 Census Data Indonesia/Unemployment rate.csv"))
-IDN_PopuProjection <- read_csv(here::here("data-raw/2015 Census Data Indonesia/indo_12  population projection 2015.csv"))
-
-new <- IDN_Household %>% mutate(
-  ID = substr(CA2015, 3, 4),
-  
-  #IDNS01
-  PopulationIDN = IDN_Population$total,
-  PopulationMen = IDN_Population$Men,
-  PopulationWomen = IDN_Population$Women,
-  
-  #IDNS02
-  Household = IDN_Household$TotalHousehold,
-  
-  #IDNS03
-  Incomeff = IDN_Income$farmersandfisherman,
-  Incomemerchant = IDN_Income$merchant,
-  Incomegov = IDN_Income$governmentemployees,
-  Incomepriv = IDN_Income$privateemployees,
-  Incomeentrep = IDN_Income$entrepreneur,
-  Incomefreelancer = IDN_Income$freelancer,
-  
-  #IDNS04
-  Medianage = IDN_Medianage$Medianage,
-  
-  #IDNS05
-  RatioParticp = IDN_Rcpr$RCPR2015,
-  
-  #IDNS06
-  Unemployment2015 = IDN_Unemployment$Unemploymentrate2015,
-  Unemployment2016 = IDN_Unemployment$Unemploymentrate2016,
-  Unemployment2017 = IDN_Unemployment$Unemploymentrate2017,
-  Unemployment2018 = IDN_Unemployment$Unemploymentrate2018,
-  
-  #IDNS07
-  PopulationProjection2010 = IDN_PopuProjection$Populationprojection2010,
-  PopulationProjection2015 = IDN_PopuProjection$Populationprojection2015,
-  PopulationProjection2020 = IDN_PopuProjection$Populationprojection2020,
-  PopulationProjection2025 = IDN_PopuProjection$Populationprojection2025,
-  PopulationProjection2030 = IDN_PopuProjection$Populationprojection2030,
-  PopulationProjection2035 = IDN_PopuProjection$Populationprojection2035)
-  
-  #Join two dataset
-  codearea <- IDN_Codearea
-  new <- new %>% mutate(ID =as.numeric(ID))%>%
-    left_join(codearea,new, by = "ID")
-    
-  
-  IDNS2010 <- new %>%
-    filter(!is.na(Provinces)) %>%
-    select(-c(ends_with("_U"), ends_with("_H"), CA2015))
-    
-  IDNS2010 <- IDNS2010 %>%
-    select(ID, Provinces, PopulationIDN, everything())%>%
-    mutate(ID = as.numeric(ID))
-
-IDNS2010 <- IDNS2010 %>% tbl_df()
+data(IDNS2010)
 ```
-
-## Dimensions
-
-``` {r dimensions}
-dim(IDNS2010)
-```
-
-## preview some of the data
-
-```{r Preview some of the data}
-IDNS2010 %>%
-  select(Provinces,PopulationIDN, PopulationMen, PopulationWomen, PopulationProjection2010, PopulationProjection2035, Incomegov, Medianage, Unemployment2015) %>%
-  head(10) %>%
-  kable()
-
-save(IDNS2010, file = '../data/IDNS2010.rdata')
-```
+in this part to answer the question which provinces has the high unemployement rate in Indonesia
 
 ```{r ggplot-Unemploymentrate}
 ggplot(IDNS2010[1:6,],
@@ -123,9 +46,11 @@ ggplot(IDNS2010[1:6,],
   labs(x = "Provinces",
        y = "% Unemployment") +
   theme_minimal() +
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  coord_flip()
   
 ```
+the results above showed that province Aceh has the high percentage for unempolyment rate with almost 15% from the population.
 
 ## Total votes
 ## mostly people in Indonesia working as gov employee, and they said that be a government employee is the goal job, so in this part, in this interesting to show about the income for govenrment employees based on ID area
@@ -142,10 +67,13 @@ ggplot(IDNS2010[1:6,],
   labs(x = "ID",
        y = "Incomegov (RP)") +
   theme_minimal() +
-  theme(legend.position = "none")
+  theme(legend.position = "none")+
+  coord_flip()
 ```
+from the result above showed that province Banten with ID area (16) has the high income in government employee with average 4,3 million rupiah/month and DKI jakarta the second province with the high income in government employee with average 4,2 million rupiah/month
 
 ## Population Men
+in this part we want to see which provinces has the highest men population in Indonesia
 
 ```{r PopulationMen}
 ggplot(IDNS2010[1:6,],
@@ -157,11 +85,17 @@ ggplot(IDNS2010[1:6,],
               size = 2,
               width = 0.3) +
   theme_minimal() +
+  labs(x = "Provinces", 
+       y = "Population Men") +
   theme(legend.position = "none") +
-  labs(x = "Provinces", y = "Population Men") 
+  coord_flip()
   
 ```
+Province of Sumatera Utara has the highest men population in Indonesia
+
+
 #Population Women
+in this part we want to see which provinces has the highest women population in Indonesia
 
 ```{r PopulationWomen}
 ggplot(IDNS2010[1:6,],
@@ -173,13 +107,18 @@ ggplot(IDNS2010[1:6,],
               size = 2,
               width = 0.3) +
   theme_minimal() +
+  labs(x = "Provinces", y = "Population women") +
   theme(legend.position = "none") +
-  labs(x = "Provinces", y = "Population women")
+  coord_flip()
 ```
+it's similar with men population, Sumatera utara has the highest women population
 
 ## in this part to see how the population projection in 2010, 2020, and 2025
+in this part to answer what the future size and structur of the population look like
 
 ```{r totalseats}
+library (tidyr)
+library(dplyr)
 
 IDNS <- IDNS2010 %>%
   select(PopulationProjection2010, 
@@ -196,10 +135,11 @@ IDNS <- IDNS2010 %>%
               size = 2,
               width = 0.3) +
   theme_minimal() +
+  labs(x = "population projection", y = "total")+
   theme(legend.position = "none") +
-  labs(x = "population projection", y = "total")
+  coord_flip()
   
 ```
 
-
+from the populaltion projection above we can see that the population projection for future will growth in 2025
 
