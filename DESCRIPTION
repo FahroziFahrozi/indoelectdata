@@ -40,5 +40,9 @@ Imports:
     tm,
     twitteR ,
     wordcloud,
+<<<<<<< HEAD
     cluster.datasets,
+=======
+    cluster_datasets,
+>>>>>>> b4c4856d88ade0615691aeee268fe4f70f91e744
     RSentiment
