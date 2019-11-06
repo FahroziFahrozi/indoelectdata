@@ -1,7 +1,7 @@
 README
 ================
 
-## Exploring Election and Census Highly Informative Data Nationally for Indonesia ( Eechidna R package)
+## Exploring Election and Census Highly Informative Data Nationally for Indonesia ( indoelectdata R package)
 
 The R package *indoelectdata* provides data from Indonesia election. the
 election data from the 2014 Legislative election including census data
