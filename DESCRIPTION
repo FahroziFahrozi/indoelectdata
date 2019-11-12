@@ -1,22 +1,7 @@
 Package: indoelectdata
-Title: Exploring and visualization the election data for Indonesia
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Fahrozi",
-           family = "Fahrozi",
-           role = c("aut", "cre"),
-           email = "ozifahrozi2@gmail.com",
-           comment = c(ORCID = "https://orcid.org/0000-0002-6778-0561"))
+Title: Exploring and visualization the election data for Indonesia
 Description: data used from Indonesia Central Bureau of Statistics, and Indonesia Electoral Commision 2014. in this package includes tools for exploring and visualizing data including Twitter sentiment analysis from tweets on Twitter, as well as exploring census data in Indonesia. in this package incorporates data that is copyright Indonesia Electoral commision and Indonesia Bureau of Statistics for data 2010-2015.
-License: AGPL-3
-Encoding: UTF-8
-LazyData: true
-Suggests: 
-    knitr,
-    rmarkdown
-URL : https://github.com/FahroziFahrozi/GSoC-Project
-VignetteBuilder: knitr
-RoxygenNote: 6.1.1
 Imports:
     broom ,
     corrplot ,
@@ -38,11 +23,26 @@ Imports:
     sp,
     tidyverse ,
     tm,
-    twitteR ,
-    wordcloud,
-<<<<<<< HEAD
-    cluster.datasets,
-=======
-    cluster_datasets,
->>>>>>> b4c4856d88ade0615691aeee268fe4f70f91e744
-    RSentiment
+    qpdf
+Suggests: 
+    knitr,
+    rmarkdown,
+    tidyr,
+    spelling
+Encoding: UTF-8
+Authors@R: 
+    person(given = "Fahrozi",
+           family = "Fahrozi",
+           role = c("aut", "cre"),
+           email = "ozifahrozi2@gmail.com",
+           comment = c(ORCID = "https://orcid.org/0000-0002-6778-0561"))
+Maintainer: Fahrozi <ozifahrozi2@gmail.com>
+LazyData: true
+ByteCompile: TRUE
+License: AGPL-3
+URL : https://github.com/FahroziFahrozi/indoelectdata
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
+BugReports: https://github.com/ropenscilabs/indoelectdata/issues
+Language: en-US
+

@@ -36,13 +36,10 @@ General Public License v3.0
 ## Feedback, contributing, etc.
 
 Please open an issue if you find something that doesn’t work as expected
-or have questions or suggestions. Note that this project is released
-with a [Guide to Contributing](CONTRIBUTING.md) and a [Contributor Code
-of Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+or have questions or suggestions.
 
 ## Acknowledgements
 
 Thanks to Ben Marwick and Jeremy Forbes for their
-[cartogram](https://github.com/ropenscilabs/eechidna) package which
+[eechidna](https://github.com/ropenscilabs/eechidna) package which
 supplies the examples for this package.

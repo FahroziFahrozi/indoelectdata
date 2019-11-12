@@ -31,7 +31,6 @@ library(tidyverse)
 library(readxl)
 library(knitr)
 library(ggplot2)
-library(cluster.datasets)
 library(indoelectdata)
 
 data(IDNS2010)

@@ -39,12 +39,28 @@ library(readxl)
 library(ggplot2)
 library(scales)
 library(knitr)
+library(indoelectdata)
 
 data(Legislative_Election)
 data(totalvotes)
 data(Totalseats)
 ```
 
+```{r make-data-dictionary, include = FALSE}
+data_dictionary <- data.frame(
+  Variable = names(Legislative_Election), 
+  details= c(
+    "Names",
+    "PartyNm", 
+    "Electorate",
+    "Provinces"
+    ))
+```
+
+```{r display-data-dictionary, echo = FALSE}
+library(knitr)
+kable(data_dictionary)
+```
 ## Parties
 ```{r echo=FALSE, include=TRUE}
 glimpse(Legislative_Election) %>% head %>% kable
