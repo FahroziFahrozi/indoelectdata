@@ -69,4 +69,4 @@ new <- IDN_Household %>% mutate(
     mutate(ID = as.numeric(ID))
 
     
-save(IDNS2010, file = "data/IDNS2010.rdata")
+save(IDNS2010, file = "data/IDNS2010.rda")

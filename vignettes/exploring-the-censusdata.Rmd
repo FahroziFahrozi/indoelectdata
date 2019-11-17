@@ -75,6 +75,9 @@ kable(data_dictionary)
 ```
 So let's just look at some nice and simple plots using `ggplot2`.
 ```{r ggplot-Unemploymentrate}
+library(ggthemes)
+IDNS <- IDNS2010_download()
+
 ggplot(data=IDNS2010[1:6,],
        aes(x = reorder(Provinces, -Unemployment2015),
            y = Unemployment2015,

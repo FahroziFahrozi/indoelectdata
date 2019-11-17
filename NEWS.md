@@ -5,6 +5,6 @@
 
   - Added a `NEWS.md` file to track changes to the package (\#8)
 
-# indoelectdataa 0.1.0 (2019-10-27)
+# indoelectdataa 0.1.0 (2019-11-16)
 
   - Published on CRAN

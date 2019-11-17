@@ -3,7 +3,7 @@ title: "README"
 output: github_document
 ---
 
-``````{r, echo = FALSE}
+```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
